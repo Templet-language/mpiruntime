@@ -18,6 +18,7 @@
 #define _TEMPLET_DBG
 
 #include <vector>
+#include <iostream>
 
 namespace TEMPLET_DBG {
 ////////////////////C++11 run-time///////////////////////
@@ -27,15 +28,29 @@ struct chan;
 
 struct engine{
 	std::vector<chan*> ready;
+	////////////////////////////////////////////////
+	proc*(*c_proc)(int type, int id);
+	chan*(*c_chan)(int type, int id);
+	void(*link)(int id_proc, int id_port, int id_chan);
+	std::vector<chan*> chans;
+	std::vector<proc*> procs;
 };
 
 struct proc{
 	void(*recv)(chan*, proc*);
+	////////////////////////////////////////
+	int id;
+	void(*in) (proc*, std::istream&);
+	void(*out)(proc*, std::ostream&);
 };
 
 struct chan{
 	proc*p;
 	bool sending;
+	////////////////////////////////
+	int id;
+	void(*in) (chan*, std::istream&);
+	void(*out)(chan*, std::ostream&);
 };
 
 inline void duration(engine*e, double t){}

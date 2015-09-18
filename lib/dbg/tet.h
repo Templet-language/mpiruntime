@@ -17,7 +17,7 @@
 #ifndef _TEMPLET_DBG
 #define _TEMPLET_DBG
 
-#include <vector>
+#include <map>
 #include <iostream>
 
 namespace TEMPLET_DBG {
@@ -29,17 +29,14 @@ struct chan;
 struct engine{
 	std::vector<chan*> ready;
 	////////////////////////////////////////////////
-	proc*(*c_proc)(int type, int id);
-	chan*(*c_chan)(int type, int id);
-	void(*link)(int id_proc, int id_port, int id_chan);
-	std::vector<chan*> chans;
-	std::vector<proc*> procs;
+	std::map<int,chan*> chans;
+	std::map<int,proc*> procs;
 };
 
 struct proc{
 	void(*recv)(chan*, proc*);
 	////////////////////////////////////////
-	int id;
+	int key;
 	void(*in) (proc*, std::istream&);
 	void(*out)(proc*, std::ostream&);
 };
@@ -48,7 +45,7 @@ struct chan{
 	proc*p;
 	bool sending;
 	////////////////////////////////
-	int id;
+	int key;
 	void(*in) (chan*, std::istream&);
 	void(*out)(chan*, std::ostream&);
 };

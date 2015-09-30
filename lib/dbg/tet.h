@@ -29,14 +29,15 @@ struct chan;
 struct engine{
 	std::vector<chan*> ready;
 	////////////////////////////////////////////////
-	std::map<int,chan*> chans;
-	std::map<int,proc*> procs;
+	std::map<int,chan*> chans;// channel id --> channel ref
+	std::map<int,proc*> procs;// process id --> process ref
+	std::map<int,int> pmap;   // process id --> rank in MPI_COMM_WORLD
 };
 
 struct proc{
 	void(*recv)(chan*, proc*);
 	////////////////////////////////////////
-	int key;
+	int id; // process ref in MPI message
 	void(*in) (proc*, std::istream&);
 	void(*out)(proc*, std::ostream&);
 };
@@ -45,7 +46,7 @@ struct chan{
 	proc*p;
 	bool sending;
 	////////////////////////////////
-	int key;
+	int id; // channel ref in MPI message
 	void(*in) (chan*, std::istream&);
 	void(*out)(chan*, std::ostream&);
 };

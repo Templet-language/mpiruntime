@@ -1,6 +1,7 @@
 #include <iostream>
 //#include <vector>
 #include <queue>
+#include <map>
 #include <math.h>
 
 using namespace std;
@@ -15,15 +16,27 @@ struct chan;
 struct engine{ 
 	//std::vector<chan*> ready;
 	std::queue<chan*> ready;
+	//////////////////////////////////////////////// 
+ 	std::map<int,chan*> chans;// channel id --> channel ref 
+ 	std::map<int,proc*> procs;// process id --> process ref 
+ 	std::map<int,int> pmap;   // process id --> rank in MPI_COMM_WORLD 
 }; 
  
 struct proc{ 
 	void(*recv)(chan*, proc*); 
+	//////////////////////////////////////// 
+ 	int id; // process ref in MPI message 
+ 	void(*in) (proc*, std::istream&); 
+ 	void(*out)(proc*, std::ostream&); 
 }; 
  
 struct chan{ 
 	proc*p; 
  	bool sending; 
+	//////////////////////////////// 
+	int id; // channel ref in MPI message 
+	void(*in) (chan*, std::istream&); 
+	void(*out)(chan*, std::ostream&); 
 }; 
  
 inline void send(engine*e, chan*c, proc*p) 

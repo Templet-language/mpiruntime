@@ -1,6 +1,8 @@
 #include <iostream>
-#include <vector>
+//#include <vector>
+#include <queue>
 #include <math.h>
+
 using namespace std;
 
 double x0,x1,x2,s2,c2;
@@ -11,7 +13,8 @@ struct proc;
 struct chan; 
  
 struct engine{ 
-	std::vector<chan*> ready; 
+	//std::vector<chan*> ready;
+	std::queue<chan*> ready;
 }; 
  
 struct proc{ 
@@ -26,9 +29,13 @@ struct chan{
 inline void send(engine*e, chan*c, proc*p) 
 { 
 	if (c->sending) return; 
- 	c->sending = true; 
- 	c->p = p; 
- 	e->ready.push_back(c); 
+ 	c->sending = true;	c->p = p; 
+ 	e->ready.push(c); 
+
+//	if (c->sending) return; 
+// 	c->sending = true; 
+// 	c->p = p; 
+// 	e->ready.push_back(c); 
 } 
  
 inline bool access(chan*c, proc*p) 
@@ -38,13 +45,20 @@ inline bool access(chan*c, proc*p)
  
 inline void run(engine*e, int n = 1) 
 { 
+ 	while (!e->ready.empty()){ 
+ 		chan*c = e->ready.front(); e->ready.pop(); 
+ 		c->sending = false; 
+ 		c->p->recv(c, c->p); 
+ 	} 
+/* 
 	size_t rsize; 
 	while (rsize = e->ready.size()){ 
  		int n = rand() % rsize;	
 		std::vector<chan*>::const_iterator it = e->ready.begin() + n; 
  		chan*c = *it;	e->ready.erase(it); c->sending = false; 
  		c->p->recv(c, c->p); 
-	} 
+	}
+*/
 } 
 
 /////////////////////////////

@@ -1,162 +1,102 @@
-/*$TET$templet$!cpp-copyright!*/
-/*--------------------------------------------------------------------------*/
-/*  Copyright 2010-2015 Sergey Vostokin                                     */
-/*                                                                          */
-/*  Licensed under the Apache License, Version 2.0 (the "License");         */
-/*  you may not use this file except in compliance with the License.        */
-/*  You may obtain a copy of the License at                                 */
-/*                                                                          */
-/*  http://www.apache.org/licenses/LICENSE-2.0                              */
-/*                                                                          */
-/*  Unless required by applicable law or agreed to in writing, software     */
-/*  distributed under the License is distributed on an "AS IS" BASIS,       */
-/*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.*/
-/*  See the License for the specific language governing permissions and     */
-/*  limitations under the License.                                          */
-/*--------------------------------------------------------------------------*/
-/*$TET$*/
+#include <iostream>
+#include <vector>
+#include <math.h>
+using namespace std;
 
-/*$TET$templet$!templet!*/
-/*~Link=
-	+Begin ? argSin2 -> Calc | argCos2 -> Calc;
-	 Calc  ! result  -> End;
-	 End.
-*Parent=
-	 p1 : Link ! result -> join;
-	 p2 : Link ! result -> join;
-	+fork(p1!argCos2,p2!argSin2);
-	 join(p1?result,p2?result).
-*Child=
-	p : Link ? argCos2 -> calcCos2 | argSin2 -> calcSin2;
-	calcCos2(p?argCos2,p!result);
-	calcSin2(p?argSin2,p!result).*/
-/*$TET$*/
+double x0,x1,x2,s2,c2;
 
-#include "templet.h"
+/////////////////////////////
+struct engine; 
+struct proc; 
+struct chan; 
+ 
+struct engine{ 
+	std::vector<chan*> ready; 
+}; 
+ 
+struct proc{ 
+	void(*recv)(chan*, proc*); 
+}; 
+ 
+struct chan{ 
+	proc*p; 
+ 	bool sending; 
+}; 
+ 
+inline void send(engine*e, chan*c, proc*p) 
+{ 
+	if (c->sending) return; 
+ 	c->sending = true; 
+ 	c->p = p; 
+ 	e->ready.push_back(c); 
+} 
+ 
+inline bool access(chan*c, proc*p) 
+{ 
+	return c->p == p && !c->sending; 
+} 
+ 
+inline void run(engine*e, int n = 1) 
+{ 
+	size_t rsize; 
+	while (rsize = e->ready.size()){ 
+ 		int n = rand() % rsize;	
+		std::vector<chan*>::const_iterator it = e->ready.begin() + n; 
+ 		chan*c = *it;	e->ready.erase(it); c->sending = false; 
+ 		c->p->recv(c, c->p); 
+	} 
+} 
 
-/*$TET$templet$!cpp-prologue!*/
-/*$TET$*/
-//////////////////////class Link////////////////////
-Link::Link(TEMPLET_DBG::Assemble*a):TEMPLET_DBG::Channel(a)
+/////////////////////////////
+/*
+~Link= 
+ 	+Begin ? argSin2 -> Calc | argCos2 -> Calc; 
+ 	 Calc  ! result  -> End; 
+ 	 End. 
+*Parent= 
+ 	 p1 : Link ! result -> join; 
+ 	 p2 : Link ! result -> join; 
+ 	+fork(p1!argCos2,p2!argSin2); 
+ 	 join(p1?result,p2?result). 
+*Child= 
+ 	p : Link ? argCos2 -> calcCos2 | argSin2 -> calcSin2; 
+ 	calcCos2(p?argCos2,p!result); 
+ 	calcSin2(p?argSin2,p!result).
+*/ 
+/////////////////////////////
+
+engine e; 
+proc  parent,child1,child2; 
+chan  link0,link1,link2;
+
+void  Parent(chan*c, proc*p)
 {
-/*$TET$Link$!constructor!*/
-/*$TET$*/
+	if(c==&link0){  
+		cin >> x0; x1=x2=x0;
+		send(&e,&link1,&child1);
+		send(&e,&link2,&child2);
+	}
+	if(access(&link1,p) && access(&link2,p))
+		cout << endl << "sin2(x)+cos2(x)=" << s2+c2;
 }
 
-Link::~Link()
+void Child(chan*c, proc*)
 {
-/*$TET$Link$!destructor!*/
-/*$TET$*/
+	if(c==&link1) s2=sin(x1)*sin(x1);  
+	else if(c==&link2)c2=cos(x2)*cos(x2);
+	else cout << "something wrong";
+	send(&e,c,&parent);
 }
 
-//////////////////////class Parent////////////////////
-Parent::Parent(TEMPLET_DBG::Assemble*a):TEMPLET_DBG::Process(a)
+void main()
 {
-/*$TET$Parent$!constructor!*/
-/*$TET$*/
-}
-
-Parent::~Parent()
-{
-/*$TET$Parent$!destructor!*/
-/*$TET$*/
-}
-
-/*$TET$Parent$!usercode!*/
-/*$TET$*/
-
-bool Parent::fork(/*out*/Link::argCos2*p1,/*out*/Link::argSin2*p2)
-{
-/*$TET$Parent$fork*/
-	p1->x=p2->x=0.333;
-	return true;
-/*$TET$*/
-}
-
-bool Parent::join(/*in*/Link::result*p1,/*in*/Link::result*p2)
-{
-/*$TET$Parent$join*/
-	cout<<"sin2x+cos2x="<<p1->y+p2->y;
-	return true;
-/*$TET$*/
-}
-
-void Parent::_run(int _selector,TEMPLET_DBG::Channel*_channel)
-{
-	bool res;
-/*$TET$Parent$!run!*/
-/*$TET$*/
-
-}
-
-//////////////////////class Child////////////////////
-Child::Child(TEMPLET_DBG::Assemble*a):TEMPLET_DBG::Process(a)
-{
-/*$TET$Child$!constructor!*/
-/*$TET$*/
-}
-
-Child::~Child()
-{
-/*$TET$Child$!destructor!*/
-/*$TET$*/
-}
-
-/*$TET$Child$!usercode!*/
-/*$TET$*/
-
-bool Child::calcCos2(/*in*/Link::argCos2*p1,/*out*/Link::result*p2)
-{
-/*$TET$Child$calcCos2*/
-	p2->y=cos(p1->x)*cos(p1->x);
-	return true;
-/*$TET$*/
-}
-
-bool Child::calcSin2(/*in*/Link::argSin2*p1,/*out*/Link::result*p2)
-{
-/*$TET$Child$calcSin2*/
-	p2->y=sin(p1->x)*sin(p1->x);
-	return true;
-/*$TET$*/
-}
-
-void Child::_run(int _selector,TEMPLET_DBG::Channel*_channel)
-{
-	bool res;
-/*$TET$Child$!run!*/
-/*$TET$*/
-
-}
-
-//////////////////////class templet////////////////////
-templet::templet(int NT): TEMPLET_DBG::Assemble(NT)
-{
-/*$TET$templet$!constructor!*/
-/*$TET$*/
-}
-
-templet::~templet()
-{
-/*$TET$templet$!destructor!*/
-/*$TET$*/
-}
-
-/*$TET$templet$!cpp-epilogue!*/
-int main(int argc, char*argv[])
-{
-	templet tet(2);
+	//cin >> x;
+	//s2=sin(x)*sin(x); /*//*/ c2=cos(x)*cos(x);
+	//cout << endl << "sin2(x)+cos2(x)=" << s2+c2;
 	
-	Parent* p=tet.new_Parent();
-	Child*  c1=tet.new_Child();
-	Child*  c2=tet.new_Child();
-
-	c1->p_p(p->p_p1());
-	c2->p_p(p->p_p2());
-
-	tet.run();
+	parent.recv=&Parent;
+	child1.recv=child2.recv=&Child;
 	
-	return 0;
+	send(&e,&link0,&parent);
+	run(&e);
 }
-/*$TET$*/
-

@@ -17,6 +17,7 @@
 #ifndef _TEMPLET_DBG
 #define _TEMPLET_DBG
 
+#include <vector>
 #include <map>
 #include <iostream>
 

@@ -62,7 +62,7 @@ chan  link0,link1,link2;
 void  Parent(chan*c, proc*p)
 {
 	if(c==&link0){  
-		cin >> x;
+		// cin >> x;
 		send(&e,&link1,&child1);
 		send(&e,&link2,&child2);
 	}
@@ -165,6 +165,8 @@ void main()
 	e.pmap[0]=0;
 	e.pmap[1]=1;
 	e.pmap[2]=2;
+
+	cin >> x;
 
 	send(&e,&link0,&parent);
 	run(&e);

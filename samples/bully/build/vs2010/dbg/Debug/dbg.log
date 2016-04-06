@@ -1,0 +1,34 @@
+﻿Построение начато 04.04.2016 13:44:42.
+     1>Проект "C:\reserve\studing\Templet\mpiruntime\mpiruntime\samples\bully\build\vs2010\dbg\dbg.vcxproj" в узле 2 (целевые объекты rebuild).
+     1>_PrepareForClean:
+         Файл "Debug\dbg.lastbuildstate" удаляется.
+       InitializeBuildStatus:
+         Создание "Debug\dbg.unsuccessfulbuild", так как было задано "AlwaysCreate".
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../../../../../lib /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\..\..\..\lib\dbg\tet.cpp ..\..\..\templet.cpp
+         templet.cpp
+         tet.cpp
+         Создание кода...
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\dbg.exe.embed.manifest.res" Debug\dbg_manifest.rc 
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\reserve\studing\Templet\mpiruntime\mpiruntime\samples\bully\build\vs2010\Debug\dbg.exe" /INCREMENTAL /NOLOGO mpi.lib cxx.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\dbg.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\reserve\studing\Templet\mpiruntime\mpiruntime\samples\bully\build\vs2010\Debug\dbg.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\reserve\studing\Templet\mpiruntime\mpiruntime\samples\bully\build\vs2010\Debug\dbg.lib" /MACHINE:X86 Debug\dbg.exe.embed.manifest.res
+         Debug\tet.obj
+         Debug\templet.obj
+       Manifest:
+         Файл "Debug\dbg.exe.embed.manifest" удаляется.
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\dbg.exe.embed.manifest" /manifest Debug\dbg.exe.intermediate.manifest
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\dbg.exe.embed.manifest.res" Debug\dbg_manifest.rc 
+       LinkEmbedManifest:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\reserve\studing\Templet\mpiruntime\mpiruntime\samples\bully\build\vs2010\Debug\dbg.exe" /INCREMENTAL /NOLOGO mpi.lib cxx.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\dbg.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\reserve\studing\Templet\mpiruntime\mpiruntime\samples\bully\build\vs2010\Debug\dbg.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\reserve\studing\Templet\mpiruntime\mpiruntime\samples\bully\build\vs2010\Debug\dbg.lib" /MACHINE:X86 Debug\dbg.exe.embed.manifest.res
+         Debug\tet.obj
+         Debug\templet.obj
+         dbg.vcxproj -> C:\reserve\studing\Templet\mpiruntime\mpiruntime\samples\bully\build\vs2010\Debug\dbg.exe
+       FinalizeBuildStatus:
+         Файл "Debug\dbg.unsuccessfulbuild" удаляется.
+         Обращение к "Debug\dbg.lastbuildstate".
+     1>Построение проекта "C:\reserve\studing\Templet\mpiruntime\mpiruntime\samples\bully\build\vs2010\dbg\dbg.vcxproj" завершено (целевые объекты rebuild).
+
+Построение успешно завершено.
+
+Затраченное время: 00:00:04.22
